@@ -27,7 +27,7 @@ class Quiz {
         this.questions[i],
       ];
     }
-    return this.choices;
+    return this.questions;
   }
 
   // 5. checkAnswer(answer)
