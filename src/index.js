@@ -73,30 +73,36 @@ document.addEventListener("DOMContentLoaded", () => {
   /************  TIMER  ************/
 
   let timer;
-  //const displayTimer = document.getElementById("timeRemaining");
-
-  //function startCountdown() {
-  // console.log("startCountdown called!");
-  //timer = setInterval(() => {
-  //quizDuration--;
-  //displayTimer.innerText = quizDuration;
-  //console.log(quizDuration);
-  //if (quizDuration === 0) {
-  //clearInterval(timer);
-  //}
-  //}, 1000);
-  //}
 
   /************  EVENT LISTENERS  ************/
 
   nextButton.addEventListener("click", nextButtonHandler);
   restartButton.addEventListener("click", restartQuiz);
-  
+
   /************  FUNCTIONS  ************/
 
   // showQuestion() - Displays the current question and its choices
   // nextButtonHandler() - Handles the click on the next button
   // showResults() - Displays the end view and the quiz results
+
+  function startTimer() {
+    timer = setInterval(() => {
+      quiz.timeRemaining--;
+
+      const minutes = Math.floor(quiz.timeRemaining / 60)
+        .toString()
+        .padStart(2, "0");
+      const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+      timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+
+      if (quiz.timeRemaining <= 0) {
+        clearInterval(timer);
+        showResults;
+      }
+    }, 1000);
+  }
+
+  startTimer();
 
   function showQuestion() {
     // If the quiz has ended, show the results
@@ -148,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Hint 3: You can use the `element.appendChild()` method to append an element to the choices container.
     // Hint 4: You can use the `element.innerText` property to set the inner text of an element.
 
-    questions.choices.forEach((choice) => {
+    question.choices.forEach((choice) => {
       const choiceInput = document.createElement("input");
       choiceInput.type = "radio";
       choiceInput.name = "choice";
@@ -156,9 +162,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const label = document.createElement("label");
       label.innerText = choice;
+      const lineBreak = document.createElement("br");
 
       choiceContainer.appendChild(choiceInput);
       choiceContainer.appendChild(label);
+      choiceContainer.appendChild(lineBreak);
     });
   }
 
@@ -175,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //  You can use check which choice was selected by checking if the `.checked` property is true.
     choices.forEach((choice) => {
       if (choice.checked) {
-        selectedAnswer = choiceInput.value;
+        selectedAnswer = choice.value;
       }
     });
     // 3. If an answer is selected (`selectedAnswer`), check if it is correct and move to the next question
@@ -186,6 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
       quiz.checkAnswer(selectedAnswer);
       quiz.moveToNextQuestion();
       showQuestion();
+    } else {
+      alert("Please select an answer");
     }
   }
 
@@ -200,5 +210,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 3. Update the result container (div#result) inner text to show the number of correct answers out of total questions
     resultContainer.innerText = `You scored ${quiz.correctAnswers} out of ${quiz.questions.length} correct answers!`; // This value is hardcoded as a placeholder
+
+    clearInterval(timer);
+  }
+
+  //Restart timer once an answer has been selected
+
+  function restartQuiz() {
+    endView.style.display = "none";
+    quizView.style.display = "block";
+    quiz.currentQuestionIndex = 0;
+    quiz.correctAnswers = 0;
+    quiz.timeRemaining = quiz.timeLimit;
+
+    quiz.shuffleQuestions();
+
+    const minutes = Math.floor(quiz.timeRemaining / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+    timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+
+    clearInterval(timer);
+    startTimer();
+
+    showQuestion();
   }
 });
