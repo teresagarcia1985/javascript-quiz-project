@@ -5,6 +5,7 @@
     <title>JavaScript Quiz</title>
     <link rel="stylesheet" href="styles/style.css" />
   </head>
+
   <body>
     <div class="container">
       <header>
@@ -21,7 +22,17 @@
 
         <div class="content">
           <div id="question"></div>
-          <ul id="choices"></ul>
+          <ul id="choices">
+            <li>
+              <input
+                type="radio"
+                name="choice"
+                value="CHOICE TEXT HERE"
+                title="Please select an answer"
+              />
+              <label>CHOICE TEXT HERE</label>
+            </li>
+          </ul>
         </div>
         <div id="timeRemaining">Remaining Time: <span>00:00</span></div>
         <button id="nextButton" class="button-primary">Answer</button>
@@ -43,6 +54,8 @@
           Restart Quiz
         </button>
       </div>
+      <div id="timeRemaining">Remaining Time: <span>00:00</span></div>
+      <button id="nextButton" class="button-primary">Answer</button>
     </div>
 
     <!-- The scripts are placed at the end of the document so that all the HTML elements are loaded before we try to access them -->
