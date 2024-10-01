@@ -1,6 +1,5 @@
 class Question {
   // YOUR CODE HERE:
-
   // 1. constructor (text, choices, answer, difficulty)
   constructor(text, choices, answer, difficulty) {
     this.text = text;
